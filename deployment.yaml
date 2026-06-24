@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
-  name: sample-app
-
+  name: node-js-app
 spec:
   replicas: 2
-
   selector:
     matchLabels:
-      app: sample-app
-
+      app: node-js-app
   template:
     metadata:
       labels:
-        app: sample-app
-
+        app: node-js-app
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
-      - name: sample-app
-        image: dockerhubusername/sample-app:latest
-
-        ports:
-        - containerPort: 3000
+        - name: node-js-app
+          image: kawalepankaj/node-js-app:${IMAGE_TAG}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: node-js-app-config
